@@ -3,9 +3,9 @@ import sys
 import os
 import logging
 from waveshare_epd import epd5in83_V2
+from get_date_time import get_date_time_string
 import time
 from PIL import Image,ImageDraw,ImageFont
-import traceback
 
 #Pictures and fonts will be stored here.
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
@@ -26,6 +26,7 @@ def main():
         
         # Drawing on the image
         logging.info("Drawing")    
+        font32 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 32)
         font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
         font18 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 18)
         
@@ -45,7 +46,8 @@ def main():
         drawblack.line((half_width, banner_height, half_width, epd.height), fill = 0, width = 1)  
         drawblack.line((0, half_main_height, epd.width, half_main_height), fill = 0, width = 1)
 
-
+        # Date and Time banner
+        drawblack.text((0, 10), text=get_date_time_string(), font = font32)
         
         # Drawn image is saved to a buffer.
         epd.display(epd.getbuffer(HBlackimage))
