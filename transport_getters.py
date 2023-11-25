@@ -12,6 +12,12 @@ class Stop(object):
     type: str
     code: str
 
+@dataclass
+class Arrival(object):
+    line: str
+    destination: str
+    time_to_arrival: str
+
 def get_arrival_predictions(stop_id):
     logging.info(f"Pulling arrival info for {stop_id}.")
     url = f"https://api.tfl.gov.uk/StopPoint/{stop_id}/Arrivals"
