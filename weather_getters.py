@@ -10,6 +10,12 @@ class Weather(object):
     temperature: int
     weather_condition: int
 
+@dataclass
+class FormattedWeather(object):
+    temperature: str
+    weather_description: str
+    weather_icon: str
+
 logging.basicConfig(level=logging.DEBUG)
 
 with open("./settings.json") as file:
@@ -42,10 +48,9 @@ def get_current_weather(weather_file):
 
     return Weather(current_temp, weather_condition)
 
-def format_temperature(temperature):
-    return f"{temperature}°C"
-
-def format_weather(weather_condition):
+def get_formatted_weather_string():
+    weather = get_current_weather("./weather_cache.json")
+    
     description_dict = {
          0: "Clear night",
          1: "Sunny day",
@@ -80,7 +85,46 @@ def format_weather(weather_condition):
          30: "Thunder",
     }
 
-    return f"{description_dict[weather_condition]}"
+    icon_dict = {
+        0: "N",
+        1: "C",
+        2: "b",
+        3: "c",
+        4: "/",
+        5: "=",
+        6: "o",
+        7: "d",
+        8: "e",
+        9: "g",
+        10: "g",
+        11: "g",
+        12: "h",
+        13: "h",
+        14: "h",
+        15: "h",
+        16: "u",
+        17: "u",
+        18: "u",
+        19: "h",
+        20: "h",
+        21: "h",
+        22: "k",
+        23: "k",
+        24: "k",
+        25: "u",
+        26: "u",
+        27: "u",
+        28: "s",
+        29: "s",
+        30: "s"
+    }
+
+    temperature_string = f"{weather.temperature}°C"
+    weather_description = f"{description_dict[weather.weather_condition]}"
+    icon_string = f"{icon_dict[weather.weather_condition]}"
+
+    return FormattedWeather(temperature_string, weather_description, icon_string)
+
 
 if __name__ == "__main__":
     write_weather_to_file('./weather_cache.json', get_raw_weather_data(settings["weather_latitude"], settings["weather_longtitude"]))

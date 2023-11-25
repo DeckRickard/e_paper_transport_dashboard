@@ -6,26 +6,28 @@ from waveshare_epd import epd5in83_V2
 from get_date_time import get_date_time_string
 import time
 from PIL import Image,ImageDraw,ImageFont
-from weather_getters import get_current_weather, format_temperature, format_weather
+from weather_getters import get_formatted_weather_string
 
 #Pictures and fonts will be stored here.
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
-weather = "./weather_cache.json"
 
 # Global Font definitions
 font32 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 32)
 font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
 font18 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 18)
+weather_font = ImageFont.truetype(os.path.join(picdir, 'wef_____.ttf'), 46)
 
 logging.basicConfig(level=logging.DEBUG)
 
-def draw_weather(weather_file):
-    weather = get_current_weather(weather_file)
-
+def draw_weather():
+    formatted_weather = get_formatted_weather_string()
+    
     # Drawing weather information
-    image = Image.new('1', (162, 80), 255)
+    image = Image.new('1', (98, 80), 255)
     draw = ImageDraw.Draw(image)
-    draw.text((0, 0), text=format_temperature(weather.temperature), font = font18)
+    draw.text((49, 0), text=formatted_weather.weather_icon, font=weather_font, anchor="ma")
+    draw.text((49, 40), text=formatted_weather.weather_description, font=font18, anchor="ma")
+    draw.text((49, 60), text=formatted_weather.temperature, font = font18, anchor="ma")
 
     return image
 
@@ -61,7 +63,7 @@ def main():
         drawblack.text((0, 10), text=get_date_time_string(), font = font32)
 
         # Weather Info
-        HBlackimage.paste(draw_weather(weather), (weather_x_pos, 0))
+        HBlackimage.paste(draw_weather(), (weather_x_pos, 0))
         
         # Drawn image is saved to a buffer.
         epd.display(epd.getbuffer(HBlackimage))
