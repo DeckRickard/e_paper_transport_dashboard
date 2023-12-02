@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from dataclasses import dataclass
 import logging
 from math import floor
@@ -61,12 +62,12 @@ def get_formatted_weather_string():
          6: "Fog",
          7: "Cloudy",
          8: "Overcast",
-         9: "Light rain shower",
-         10: "Light rain shower",
+         9: "Light rain \nshower",
+         10: "Light rain \nshower",
          11: "Drizzle",
          12: "Light rain",
-         13: "Heavy rain shower",
-         14: "Heavy rain shower",
+         13: "Heavy rain \nshower",
+         14: "Heavy rain \nshower",
          15: "Heavy rain",
          16: "Sleet shower",
          17: "Sleet shower",
@@ -74,11 +75,11 @@ def get_formatted_weather_string():
          19: "Hail shower",
          20: "Hail shower",
          21: "Hail",
-         22: "Light snow shower",
-         23: "Light snow shower",
+         22: "Light snow \nshower",
+         23: "Light snow \nshower",
          24: "Light snow",
-         25: "Heavy snow shower",
-         26: "Heavy snow shower",
+         25: "Heavy snow \nshower",
+         26: "Heavy snow \nshower",
          27: "Heavy snow",
          28: "Thunder shower",
          29: "Thunder shower",
@@ -127,4 +128,4 @@ def get_formatted_weather_string():
 
 
 if __name__ == "__main__":
-    write_weather_to_file('./weather_cache.json', get_raw_weather_data(settings["weather_latitude"], settings["weather_longtitude"]))
+    write_weather_to_file('./weather_cache.json', get_raw_weather_data(settings["weather_latitude"], settings["weather_longtitude"])) # This is what is run when the script is run by the cronjob.

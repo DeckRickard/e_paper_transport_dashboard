@@ -15,6 +15,7 @@ picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
 font32 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 32)
 font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
 font18 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 18)
+font14 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 14)
 weather_font = ImageFont.truetype(os.path.join(picdir, 'wef_____.ttf'), 46)
 
 logging.basicConfig(level=logging.DEBUG)
@@ -23,11 +24,11 @@ def draw_weather():
     formatted_weather = get_formatted_weather_string()
     
     # Drawing weather information
-    image = Image.new('1', (98, 80), 255)
+    image = Image.new('1', (98, 96), 255)
     draw = ImageDraw.Draw(image)
     draw.text((49, 0), text=formatted_weather.weather_icon, font=weather_font, anchor="ma")
-    draw.text((49, 40), text=formatted_weather.weather_description, font=font18, anchor="ma")
-    draw.text((49, 60), text=formatted_weather.temperature, font = font18, anchor="ma")
+    draw.text((49, 30), text=formatted_weather.weather_description, font=font14, anchor="ma")
+    draw.text((49, 65), text=formatted_weather.temperature, font = font18, anchor="ma")
 
     return image
 
@@ -55,12 +56,13 @@ def main():
         weather_x_pos = int(epd.width * 0.85)
     
         # Drawing basic layout.
-        drawblack.line((0, banner_height, epd.width, banner_height), fill = 0, width = 1)
-        drawblack.line((half_width, banner_height, half_width, epd.height), fill = 0, width = 1)  
-        drawblack.line((0, half_main_height, epd.width, half_main_height), fill = 0, width = 1)
+        drawblack.line((0, banner_height, epd.width, banner_height), fill = 0, width = 2)
+        drawblack.line((half_width, banner_height, half_width, epd.height), fill = 0, width = 2)  
+        drawblack.line((0, half_main_height, epd.width, half_main_height), fill = 0, width = 2)
 
         # Date and Time banner
-        drawblack.text((0, 10), text=get_date_time_string(), font = font32)
+        drawblack.text((0, 48), text=get_date_time_string(), font = font32, anchor="lm")
+        drawblack.line((weather_x_pos - 2, 0, weather_x_pos - 2, banner_height), fill = 0, width= 2)
 
         # Weather Info
         HBlackimage.paste(draw_weather(), (weather_x_pos, 0))
