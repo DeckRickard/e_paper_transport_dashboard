@@ -5,8 +5,10 @@ import logging
 from waveshare_epd import epd5in83_V2
 from get_date_time import get_date_time_string
 import time
+import json
 from PIL import Image,ImageDraw,ImageFont
 from weather_getters import get_formatted_weather_string
+from transport_getters import get_arrival_predictions, get_stop_information
 
 #Pictures and fonts will be stored here.
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
@@ -32,10 +34,35 @@ def draw_weather():
 
     return image
 
+def draw_stop_information(stop_id):
+    stop = get_stop_information(stop_id)
+    arrivals = get_arrival_predictions(stop_id)
+
+    # Drawing stop information
+    image = Image.new('1', (322, 190), 255)
+    draw = ImageDraw.Draw(image)
+    draw.text((0, 0), text=stop.name, font=font24)
+    draw.text((235, 0), text=stop.type, font=font24)
+    draw.text((280, 0), text=stop.code, font=font24)
+    draw.line((0, 27, 322, 27), fill=0, width=2)
+
+    arrival_y = 29
+    for arrival in arrivals:
+        draw.text((0, arrival_y), text=arrival.line, font=font18)
+        draw.text((50, arrival_y), text=arrival.destination, font=font18)
+        draw.text((295, arrival_y), text=arrival.formatted_arrival_time, font=font18)
+        arrival_y += 20
+    
+    return image
+
 def main():
     try:
         logging.info("Display refreshing")
         
+        # Load settings
+        with open("./settings.json") as file:
+            settings = json.load(file)["transport"]
+
         # Display clearing and initialisation done here.
         epd = epd5in83_V2.EPD()
         logging.info("init and Clear")
@@ -49,11 +76,19 @@ def main():
         drawblack = ImageDraw.Draw(HBlackimage)
 
         # Layout variables:
-        half_width = epd.width / 2
-        banner_height = epd.height * 0.2
-        main_height = epd.height * 0.8
-        half_main_height = (main_height / 2) + banner_height
+        half_width = int(epd.width / 2)
+        banner_height = int(epd.height * 0.2)
+        main_height = int(epd.height * 0.8)
+        half_main_height = int((main_height / 2) + banner_height)
         weather_x_pos = int(epd.width * 0.85)
+        info_1_x = 0
+        info_1_y = banner_height + 2
+        info_2_x = half_width + 2
+        info_2_y = banner_height + 2
+        info_3_x = 0
+        info_3_y = half_main_height + 2
+        info_4_x = half_width + 2
+        info_4_y = half_main_height + 2
     
         # Drawing basic layout.
         drawblack.line((0, banner_height, epd.width, banner_height), fill = 0, width = 2)
@@ -66,7 +101,13 @@ def main():
 
         # Weather Info
         HBlackimage.paste(draw_weather(), (weather_x_pos, 0))
-        
+
+        # Transport info
+        HBlackimage.paste(draw_stop_information(settings["stop_id_1"]), (info_1_x, info_1_y))
+        HBlackimage.paste(draw_stop_information(settings["stop_id_2"]), (info_2_x, info_2_y))       
+        HBlackimage.paste(draw_stop_information(settings["stop_id_3"]), (info_3_x, info_3_y))       
+        HBlackimage.paste(draw_stop_information(settings["stop_id_4"]), (info_4_x, info_4_y))       
+
         # Drawn image is saved to a buffer.
         epd.display(epd.getbuffer(HBlackimage))
         time.sleep(2)

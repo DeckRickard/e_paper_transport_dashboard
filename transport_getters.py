@@ -51,14 +51,10 @@ def get_stop_information(stop_id):
 
     request = requests.get(url)
     data = request.json()
-
     stop_name = data["commonName"]
     child_stop = find_child_stop(data["children"], stop_id)
     stop_type = child_stop["modes"][0]
-    if stop_type == 'bus':
-        stop_code = child_stop["stopLetter"]
-    else:
-        stop_code = ''
+    stop_code = child_stop["stopLetter"]
     return Stop(stop_name, stop_type, stop_code)
 
 def find_child_stop(children, stop_id): # TfL supplies a list of children for specific bus stops, etc. We need to find the correct child from the StopPoint data.
@@ -67,5 +63,5 @@ def find_child_stop(children, stop_id): # TfL supplies a list of children for sp
     return children[child_index]
 
 if __name__ == "__main__":
-    print(get_stop_information("490006335N"))
-    print(get_arrival_predictions("490006335N"))
+    print(get_stop_information(""))
+    print(get_arrival_predictions(""))
