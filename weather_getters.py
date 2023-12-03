@@ -33,7 +33,7 @@ def get_raw_weather_data(lat, long): # Returns weather data for a given latitude
     }
 
     request = requests.get(url, headers=headers)
-    return request.json()["features"][0]["properties"]["timeSeries"][0] #This is accessing the first in the list of weather forecasts, which should be the most up-to-date.
+    return request.json()["features"][0]["properties"]["timeSeries"][1] #This is accessing the first in the list of weather forecasts, which should be the most up-to-date.
 
 def write_weather_to_file(filename, value): #Writes the response JSON to a file.
     logging.info("Writing weather data to cache file.")
