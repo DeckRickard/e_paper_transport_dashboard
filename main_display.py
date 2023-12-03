@@ -48,7 +48,8 @@ def draw_stop_information(stop):
             draw.text((0, 0), text=''.join(stop.name[:19]) + '...', font=font24)
         else:
             draw.text((0, 0), text=stop.name, font=font24)
-        draw.text((235, 0), text=stop.type, font=font24)
+        #draw.text((235, 0), text=stop.type, font=font24)
+        image.paste(Image.open(os.path.join(picdir, 'icons8-bus-24.png')), (235, 0))
         draw.text((280, 0), text=stop.code, font=font24)
         draw.line((0, 27, 322, 27), fill=0, width=2)
 
