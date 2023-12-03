@@ -60,10 +60,10 @@ def draw_stop_information(stop):
             for arrival in arrivals:
                 draw.text((0, arrival_y), text=arrival.line, font=font18)
                 if len(arrival.destination) > 26: # Destination will be shortened if too long.
-                    draw.text((50, arrival_y), text=''.join(arrival.destination[:26]) + '...', font=font18)
+                    draw.text((45, arrival_y), text=''.join(arrival.destination[:26]) + '...', font=font18)
                 else:
-                    draw.text((50, arrival_y), text=arrival.destination, font=font18)
-                draw.text((290, arrival_y), text=arrival.formatted_arrival_time, font=font18)
+                    draw.text((45, arrival_y), text=arrival.destination, font=font18)
+                draw.text((276, arrival_y), text=arrival.formatted_arrival_time, font=font18)
                 arrival_y += 20
     
         return image
