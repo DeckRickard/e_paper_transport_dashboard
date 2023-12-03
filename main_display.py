@@ -44,7 +44,10 @@ def draw_stop_information(stop):
         # Drawing stop information
         image = Image.new('1', (322, 190), 255)
         draw = ImageDraw.Draw(image)
-        draw.text((0, 0), text=stop.name, font=font24)
+        if len(stop.name) > 19: # Stop names that are too long will be shorted with ellipsis.
+            draw.text((0, 0), text=''.join(stop.name[:19]) + '...', font=font24)
+        else:
+            draw.text((0, 0), text=stop.name, font=font24)
         draw.text((235, 0), text=stop.type, font=font24)
         draw.text((280, 0), text=stop.code, font=font24)
         draw.line((0, 27, 322, 27), fill=0, width=2)
@@ -52,7 +55,10 @@ def draw_stop_information(stop):
         arrival_y = 29
         for arrival in arrivals:
             draw.text((0, arrival_y), text=arrival.line, font=font18)
-            draw.text((50, arrival_y), text=arrival.destination, font=font18)
+            if len(arrival.destination) > 28: # Destination will be shortened if too long.
+                draw.text((50, arrival_y), text=''.join(arrival.destination[:28]) + '...', font=font18)
+            else:
+                draw.text((50, arrival_y), text=arrival.destination, font=font18)
             draw.text((295, arrival_y), text=arrival.formatted_arrival_time, font=font18)
             arrival_y += 20
     
