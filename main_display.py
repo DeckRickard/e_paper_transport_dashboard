@@ -67,7 +67,6 @@ def main():
         epd = epd5in83_V2.EPD()
         logging.info("init and Clear")
         epd.init()
-        epd.Clear()
         time.sleep(1)
         
         # Drawing on the Horizontal image
