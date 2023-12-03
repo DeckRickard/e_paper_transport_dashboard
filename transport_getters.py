@@ -20,7 +20,7 @@ class Arrival(object):
     time_to_arrival: int
     formatted_arrival_time: str
 
-def get_arrival_predictions(stop_id):
+def get_bus_arrival_predictions(stop_id):
     logging.info(f"Pulling arrival info for {stop_id}.")
     url = f"https://api.tfl.gov.uk/StopPoint/{stop_id}/Arrivals"
 
@@ -45,7 +45,7 @@ def format_predicted_time(arrival_time):
         current_time = datetime.now()
         return (current_time + timedelta(minutes=arrival_minutes)).strftime('%H:%M')
 
-def get_stop_information(stop_id):
+def get_bus_stop_information(stop_id):
     logging.info(f"Pulling stop details for {stop_id}")
     url = f"https://api.tfl.gov.uk/StopPoint/{stop_id}"
 
@@ -63,5 +63,6 @@ def find_child_stop(children, stop_id): # TfL supplies a list of children for sp
     return children[child_index]
 
 if __name__ == "__main__":
-    print(get_stop_information(""))
-    print(get_arrival_predictions(""))
+    # These functions used for testing.
+    print(get_bus_stop_information(""))
+    print(get_bus_arrival_predictions(""))

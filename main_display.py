@@ -8,7 +8,7 @@ import time
 import json
 from PIL import Image,ImageDraw,ImageFont
 from weather_getters import get_formatted_weather_string
-from transport_getters import get_arrival_predictions, get_stop_information
+from transport_getters import get_bus_arrival_predictions, get_bus_stop_information
 
 #Pictures and fonts will be stored here.
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
@@ -34,26 +34,29 @@ def draw_weather():
 
     return image
 
-def draw_stop_information(stop_id):
-    stop = get_stop_information(stop_id)
-    arrivals = get_arrival_predictions(stop_id)
+def draw_stop_information(stop):
+    stop_id = stop["id"]
+    stop_type = stop["type"]
+    if stop_type == "bus":
+        stop = get_bus_stop_information(stop_id)
+        arrivals = get_bus_arrival_predictions(stop_id)
 
-    # Drawing stop information
-    image = Image.new('1', (322, 190), 255)
-    draw = ImageDraw.Draw(image)
-    draw.text((0, 0), text=stop.name, font=font24)
-    draw.text((235, 0), text=stop.type, font=font24)
-    draw.text((280, 0), text=stop.code, font=font24)
-    draw.line((0, 27, 322, 27), fill=0, width=2)
+        # Drawing stop information
+        image = Image.new('1', (322, 190), 255)
+        draw = ImageDraw.Draw(image)
+        draw.text((0, 0), text=stop.name, font=font24)
+        draw.text((235, 0), text=stop.type, font=font24)
+        draw.text((280, 0), text=stop.code, font=font24)
+        draw.line((0, 27, 322, 27), fill=0, width=2)
 
-    arrival_y = 29
-    for arrival in arrivals:
-        draw.text((0, arrival_y), text=arrival.line, font=font18)
-        draw.text((50, arrival_y), text=arrival.destination, font=font18)
-        draw.text((295, arrival_y), text=arrival.formatted_arrival_time, font=font18)
-        arrival_y += 20
+        arrival_y = 29
+        for arrival in arrivals:
+            draw.text((0, arrival_y), text=arrival.line, font=font18)
+            draw.text((50, arrival_y), text=arrival.destination, font=font18)
+            draw.text((295, arrival_y), text=arrival.formatted_arrival_time, font=font18)
+            arrival_y += 20
     
-    return image
+        return image
 
 def main():
     try:
@@ -65,7 +68,7 @@ def main():
 
         # Display clearing and initialisation done here.
         epd = epd5in83_V2.EPD()
-        logging.info("init and Clear")
+        logging.info("init")
         epd.init()
         time.sleep(1)
         
