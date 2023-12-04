@@ -55,7 +55,7 @@ def draw_stop_information(stop):
 
         arrival_y = 29
         if arrivals == []:
-            draw.text((0, arrival_y), text="There are currently no scheduled departures for this location.")
+            draw.text((0, arrival_y), text="There are currently no scheduled departures for this location.", font=font18)
         else:
             for arrival in arrivals:
                 draw.text((0, arrival_y), text=arrival.line, font=font18)
