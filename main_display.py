@@ -8,7 +8,7 @@ import time
 import json
 from PIL import Image,ImageDraw,ImageFont
 from weather_getters import get_formatted_weather_string
-from transport_getters import get_bus_arrival_predictions, get_bus_stop_information
+from transport_getters import get_bus_arrival_predictions, get_bus_stop_information, get_train_departure_board
 
 #Pictures and fonts will be stored here.
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
@@ -48,11 +48,11 @@ def draw_stop_information(stop):
             draw.text((2, 0), text=''.join(stop.name[:19]) + '...', font=font24)
         else:
             draw.text((2, 0), text=stop.name, font=font24)
-        #draw.text((235, 0), text=stop.type, font=font24)
         image.paste(Image.open(os.path.join(picdir, 'icons8-bus-24.png')), (235, 0))
         draw.text((280, 0), text=stop.code, font=font24)
         draw.line((0, 27, 322, 27), fill=0, width=2)
 
+        #Drawing arrivals.
         arrival_y = 29
         if arrivals == []:
             draw.text((0, arrival_y), text="There are currently no scheduled departures for this location.", font=font18)
@@ -65,8 +65,36 @@ def draw_stop_information(stop):
                     draw.text((45, arrival_y), text=arrival.destination, font=font18)
                 draw.text((276, arrival_y), text=arrival.formatted_arrival_time, font=font18)
                 arrival_y += 20
+    elif stop_type == "natl_rail":
+        departure_board = get_train_departure_board(stop_id)
+
+        # Drawing stop information
+        image = Image.new('1', (322, 190), 255)
+        draw = ImageDraw.Draw(image)
+        if len(departure_board.station_name) > 19: # Stop names that are too long will be shorted with ellipsis.
+            draw.text((2, 0), text=''.join(departure_board.station_name[:19]) + '...', font=font24)
+        else:
+            draw.text((2, 0), text=departure_board.station_name, font=font24)
+        image.paste(Image.open(os.path.join(picdir, 'icons8-train-25.png')), (235, 0))
+        draw.text((270, 0), text=departure_board.station_code, font=font24)
+        draw.line((0, 27, 322, 27), fill=0, width=2)        
+
+        #Drawing arrivals.
+        arrival_y = 29
+        if departure_board.departures == []:
+            draw.text((0, arrival_y), text="There are currently no scheduled departures for this location.", font=font18)
+        else:
+            for arrival in departure_board.departures:
+                draw.text((0, arrival_y), text=arrival.line, font=font18)
+                if len(arrival.destination) > 26: # Destination will be shortened if too long.
+                    draw.text((100, arrival_y), text=''.join(arrival.destination[:26]) + '...', font=font18)
+                else:
+                    draw.text((100, arrival_y), text=arrival.destination, font=font18)
+                draw.text((276, arrival_y), text=arrival.formatted_arrival_time, font=font18)
+                arrival_y += 20
+        
     
-        return image
+    return image
 
 def main():
     try:

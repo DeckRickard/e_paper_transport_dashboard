@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 import logging
 import requests
+from requests.auth import HTTPBasicAuth
 import json
 
 logging.basicConfig(level=logging.DEBUG)
@@ -19,6 +20,12 @@ class Arrival(object):
     destination: str
     time_to_arrival: int
     formatted_arrival_time: str
+
+@dataclass
+class DepartureBoard(object):
+    station_name: str
+    station_code: str
+    departures: list
 
 def get_bus_arrival_predictions(stop_id):
     logging.info(f"Pulling arrival info for {stop_id}.")
@@ -61,6 +68,32 @@ def find_child_stop(children, stop_id): # TfL supplies a list of children for sp
     child_ids = [child["naptanId"] for child in children]
     child_index = child_ids.index(stop_id)
     return children[child_index]
+
+def get_train_departure_board(station_id):
+    logging.info(f"Pulling details for train station ID: {station_id}")
+    url = f"https://api.rtt.io/api/v1/json/search/{station_id}"
+
+    with open("./settings.json") as file:
+            settings = json.load(file)["transport"]
+
+    user = settings["RTT_api_user"]
+    password = settings["RTT_api_pass"]
+    request = requests.get(url, auth=(user, password))
+    data = request.json()
+    
+    station_name = data["location"]["name"]
+    station_code = data["location"]["crs"]
+    departures = []
+    for arrival in data["services"]:
+        operator_name = arrival["atocName"]
+        destination = arrival["locationDetail"]["destination"][0]["description"]
+        unformatted_departure_time = arrival["locationDetail"]["realtimeDeparture"]
+        formatted_departure_time = f"{unformatted_departure_time[:2]}:{unformatted_departure_time[2:]}"
+        
+        departures.append(Arrival(operator_name, destination, None, formatted_departure_time))
+
+    return DepartureBoard(station_name, station_code, departures)
+
 
 if __name__ == "__main__":
     # These functions used for testing.
