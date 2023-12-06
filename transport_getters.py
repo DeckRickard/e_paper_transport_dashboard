@@ -84,6 +84,9 @@ def get_train_departure_board(station_id):
     station_name = data["location"]["name"]
     station_code = data["location"]["crs"]
     departures = []
+    if not data["services"]:
+        return DepartureBoard(station_name, station_code, []) 
+    
     for arrival in data["services"]:
         operator_name = arrival["atocName"]
         destination = arrival["locationDetail"]["destination"][0]["description"]

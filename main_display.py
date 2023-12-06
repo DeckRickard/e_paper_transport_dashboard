@@ -55,7 +55,7 @@ def draw_stop_information(stop):
         #Drawing arrivals.
         arrival_y = 29
         if arrivals == []:
-            draw.text((0, arrival_y), text="There are currently no scheduled departures for this location.", font=font18)
+            draw.text((0, arrival_y), text="There are currently no scheduled \ndepartures for this location.", font=font18)
         else:
             for arrival in arrivals:
                 draw.text((0, arrival_y), text=arrival.line, font=font18)
@@ -82,7 +82,7 @@ def draw_stop_information(stop):
         #Drawing arrivals.
         arrival_y = 29
         if departure_board.departures == []:
-            draw.text((0, arrival_y), text="There are currently no scheduled departures for this location.", font=font18)
+            draw.text((0, arrival_y), text="There are currently no scheduled \ndepartures for this location.", font=font18)
         else:
             for arrival in departure_board.departures:
                 draw.text((0, arrival_y), text=arrival.line, font=font18)
