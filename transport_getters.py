@@ -88,10 +88,18 @@ def get_train_departure_board(station_id):
         return DepartureBoard(station_name, station_code, []) 
     
     for arrival in data["services"]:
-        operator_name = arrival["atocName"]
-        destination = arrival["locationDetail"]["destination"][0]["description"]
-        unformatted_departure_time = arrival["locationDetail"]["realtimeDeparture"]
-        formatted_departure_time = f"{unformatted_departure_time[:2]}:{unformatted_departure_time[2:]}"
+        if not arrival["isPassenger"]: # Non-passenger services are skipped 
+            continue
+        if arrival["serviceType"] == "train":
+            operator_name = arrival["atocName"]
+            destination = arrival["locationDetail"]["destination"][0]["description"]
+            unformatted_departure_time = arrival["locationDetail"]["realtimeDeparture"]
+            formatted_departure_time = f"{unformatted_departure_time[:2]}:{unformatted_departure_time[2:]}"
+        elif arrival["serviceType"] == "bus":
+            operator_name = "Rail Replacement"
+            destination = arrival["locationDetail"]["destination"][0]["description"]
+            unformatted_departure_time = arrival["locationDetail"]["gbttBookedDeparture"]
+            formatted_departure_time = f"{unformatted_departure_time[:2]}:{unformatted_departure_time[2:]}"
         
         departures.append(Arrival(operator_name, destination, None, formatted_departure_time))
 
