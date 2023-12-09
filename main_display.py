@@ -85,7 +85,10 @@ def draw_stop_information(stop):
             draw.text((0, arrival_y), text="There are currently no scheduled \ndepartures for this location.", font=font18)
         else:
             for arrival in departure_board.departures:
-                draw.text((0, arrival_y), text=arrival.line, font=font18)
+                if len(arrival.line) > 10:
+                    draw.text((0, arrival_y), text=''.join(arrival.line[:10]) + '...', font=font18)
+                else:
+                    draw.text((0, arrival_y), text=arrival.line, font=font18)
                 if len(arrival.destination) > 26: # Destination will be shortened if too long.
                     draw.text((100, arrival_y), text=''.join(arrival.destination[:26]) + '...', font=font18)
                 else:
