@@ -7,7 +7,9 @@ There is also a weather display in the corner which uses the [Met Office API](ht
 Every effort has been made to make this code widely usable, but users with different hardware may have to modify the code to make the code work.
 ## Installation
 Simply clone the repository to a location on your Raspberry Pi. We will then set up `crontab` to run the code at certain intervals. Your `crontab` should look like this:
+
 ![image](https://github.com/r-jeffery-wall/e_paper_transport_dashboard/assets/84279240/bda50a6d-d929-4638-a7ae-816867df121f)
+
 You will need to modify these commands to make sure they point to the folder where your scripts are located.
 ## Configuration
 All configuration is done through the `settings.json` file in the root folder of the repository. An example is provided to illustrate how to use this file. You will need to provide your latitude/longtitude and API credentials for the MetOFfice API, as well as an API credential for the Real Time Trains. You will need to sign up for these services yourself and provide your own API keys to the program. You then will have to define four locations for which to pull departure information.
