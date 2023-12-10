@@ -12,7 +12,9 @@ You will need to modify these commands to make sure they point to the folder whe
 ## Configuration
 All configuration is done through the `settings.json` file in the root folder of the repository. An example is provided to illustrate how to use this file. You will need to provide your latitude/longtitude and API credentials for the MetOFfice API, as well as an API credential for the Real Time Trains. You will need to sign up for these services yourself and provide your own API keys to the program. You then will have to define four locations for which to pull departure information.
 These require an ID and a type to function. For tube and bus stops, you can use the [TfL API stopPoint search](https://api-portal.tfl.gov.uk/api-details#api=StopPoint&operation=StopPoint_SearchByQueryQueryQueryModesQueryFaresOnlyQueryMaxResultsQueryLine) to find the ID, whilst for national rail train stations you can use the three-letter CRS code which can be found by searching for the station on the [journey planner](https://www.nationalrail.co.uk).
+
 ![Screenshot 2023-12-10 162901](https://github.com/r-jeffery-wall/e_paper_transport_dashboard/assets/84279240/cf98dbfd-e930-4010-95a0-26f880c2ee53)
+
 It is recommended to use the provided `example_settings.json` file as a template to configure the program. Just remember to rename this file to `settings.json` when finished.
 There are currently three accepted station types:
 1. Bus `"bus"`
