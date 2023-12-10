@@ -22,9 +22,15 @@ There are currently three accepted station types:
 1. Bus `"bus"`
 2. Tube `"tube"`
 3. National Rail `"natl_rail"`
+
+### Considerations
 The scripts have not been tested with other types of station/stop such as DLR or London Overground, although these may work with the already provided station types. The program also currently cannot deal with locations deemed as 'hubs' by TfL (e.g: Large bus/rail/tube interchanges such as Vauxhall), as the data from these kind of locations is presented in a different format.
 ## Development
 This is a very early version of this project. As I work on it further there are a few key goals I have in mind:
 1. Add more accepted stop types.
 2. Refactor code to be more efficient and use less API calls.
 3. Improve documentation to make it easier for others to use this program.
+
+
+Please feel free to fork this repository. Any feedback is also greatly appreciated!
+The station type icons are from [icons8.com](https://icons8.com)
