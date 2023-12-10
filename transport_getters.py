@@ -27,7 +27,7 @@ class DepartureBoard(object):
     station_code: str
     departures: list
 
-def get_bus_arrival_predictions(stop_id):
+def get_bus_tube_arrival_predictions(stop_id):
     logging.info(f"Pulling arrival info for {stop_id}.")
     url = f"https://api.tfl.gov.uk/StopPoint/{stop_id}/Arrivals"
 
@@ -64,10 +64,22 @@ def get_bus_stop_information(stop_id):
     stop_code = child_stop["stopLetter"]
     return Stop(stop_name, stop_type, stop_code)
 
+def get_tube_station_information(stop_id):
+    logging.info(f"Pulling stop details for {stop_id}")
+    url = f"https://api.tfl.gov.uk/StopPoint/{stop_id}"
+
+    request = requests.get(url)
+    data = request.json()
+    stop_name = data["commonName"][:-19] #'Undergound Station' is appended to tube station names, we don't need this.
+    stop_type = "tube"
+    return Stop(stop_name, stop_type, None)
+
 def find_child_stop(children, stop_id): # TfL supplies a list of children for specific bus stops, etc. We need to find the correct child from the StopPoint data.
     child_ids = [child["naptanId"] for child in children]
     child_index = child_ids.index(stop_id)
     return children[child_index]
+
+
 
 def get_train_departure_board(station_id):
     logging.info(f"Pulling details for train station ID: {station_id}")
@@ -108,5 +120,5 @@ def get_train_departure_board(station_id):
 
 if __name__ == "__main__":
     # These functions used for testing.
-    print(get_bus_stop_information(""))
-    print(get_bus_arrival_predictions(""))
+    print(get_tube_station_information("940GZZLUOVL"))
+    print(get_bus_tube_arrival_predictions("940GZZLUOVL"))

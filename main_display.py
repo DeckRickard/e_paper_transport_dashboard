@@ -8,7 +8,7 @@ import time
 import json
 from PIL import Image,ImageDraw,ImageFont
 from weather_getters import get_formatted_weather_string
-from transport_getters import get_bus_arrival_predictions, get_bus_stop_information, get_train_departure_board
+from transport_getters import get_bus_tube_arrival_predictions, get_bus_stop_information, get_train_departure_board, get_tube_station_information
 
 #Pictures and fonts will be stored here.
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
@@ -39,7 +39,7 @@ def draw_stop_information(stop):
     stop_type = stop["type"]
     if stop_type == "bus":
         stop = get_bus_stop_information(stop_id)
-        arrivals = get_bus_arrival_predictions(stop_id)
+        arrivals = get_bus_tube_arrival_predictions(stop_id)
 
         # Drawing stop information
         image = Image.new('1', (322, 190), 255)
@@ -93,6 +93,34 @@ def draw_stop_information(stop):
                     draw.text((100, arrival_y), text=''.join(arrival.destination[:26]) + '...', font=font18)
                 else:
                     draw.text((100, arrival_y), text=arrival.destination, font=font18)
+                draw.text((276, arrival_y), text=arrival.formatted_arrival_time, font=font18)
+                arrival_y += 20
+    elif stop_type == "tube":
+        stop = get_tube_station_information(stop_id)
+        arrivals = get_bus_tube_arrival_predictions(stop_id)
+
+        # Drawing stop information
+        image = Image.new('1', (322, 190), 255)
+        draw = ImageDraw.Draw(image)
+        if len(stop.name) > 19: # Stop names that are too long will be shorted with ellipsis.
+            draw.text((2, 0), text=''.join(stop.name[:19]) + '...', font=font24)
+        else:
+            draw.text((2, 0), text=stop.name, font=font24)
+        image.paste(Image.open(os.path.join(picdir, 'icons8-metro-25.png')), (295, 0))
+        draw.line((0, 27, 322, 27), fill=0, width=2)
+
+        #Drawing arrivals.
+        arrival_y = 29
+        if arrivals == []:
+            draw.text((0, arrival_y), text="There are currently no scheduled \ndepartures for this location.", font=font18)
+        else:
+            for arrival in arrivals:
+                draw.text((0, arrival_y), text=arrival.line, font=font18)
+                destination_name = arrival.destination[:-19] #'Undergound Station' is appended to tube station names, we don't need this.
+                if len(destination_name) > 26: # Destination will be shortened if too long.
+                    draw.text((100, arrival_y), text=''.join(destination_name[:26]) + '...', font=font18)
+                else:
+                    draw.text((100, arrival_y), text=destination_name, font=font18)
                 draw.text((276, arrival_y), text=arrival.formatted_arrival_time, font=font18)
                 arrival_y += 20
         
