@@ -1,0 +1,28 @@
+{
+    "weather": {
+        "weather_latitude": "51.501008", 
+        "weather_longtitude": "-0.126122",
+        "metOffice_api_client_id": "",
+        "metOffice_api_client_secret": ""
+    },
+    "transport": {
+        "RTT_api_user": "",
+        "RTT_api_pass": "",
+        "stop_id_1": {
+           "id": "LDB",
+            "type": "natl_rail"
+        },
+        "stop_id_2": {
+           "id": "490016161S",
+            "type": "bus"
+        },
+        "stop_id_3": {
+           "id": "940GZZLUOXC",
+            "type": "tube"
+        },
+        "stop_id_4": {
+           "id": "940GZZLUMMT",
+            "type": "tube"
+        }
+    }
+}
