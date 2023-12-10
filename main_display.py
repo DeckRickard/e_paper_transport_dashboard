@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import sys
 import os
 import logging
 from waveshare_epd import epd5in83_V2
@@ -89,8 +88,8 @@ def draw_stop_information(stop):
                     draw.text((0, arrival_y), text=''.join(arrival.line[:10]) + '...', font=font18)
                 else:
                     draw.text((0, arrival_y), text=arrival.line, font=font18)
-                if len(arrival.destination) > 26: # Destination will be shortened if too long.
-                    draw.text((100, arrival_y), text=''.join(arrival.destination[:26]) + '...', font=font18)
+                if len(arrival.destination) > 17: # Destination will be shortened if too long.
+                    draw.text((100, arrival_y), text=''.join(arrival.destination[:17]) + '...', font=font18)
                 else:
                     draw.text((100, arrival_y), text=arrival.destination, font=font18)
                 draw.text((276, arrival_y), text=arrival.formatted_arrival_time, font=font18)
@@ -117,8 +116,8 @@ def draw_stop_information(stop):
             for arrival in arrivals:
                 draw.text((0, arrival_y), text=arrival.line, font=font18)
                 destination_name = arrival.destination[:-19] #'Undergound Station' is appended to tube station names, we don't need this.
-                if len(destination_name) > 26: # Destination will be shortened if too long.
-                    draw.text((100, arrival_y), text=''.join(destination_name[:26]) + '...', font=font18)
+                if len(destination_name) > 17: # Destination will be shortened if too long.
+                    draw.text((100, arrival_y), text=''.join(destination_name[:17]) + '...', font=font18)
                 else:
                     draw.text((100, arrival_y), text=destination_name, font=font18)
                 draw.text((276, arrival_y), text=arrival.formatted_arrival_time, font=font18)

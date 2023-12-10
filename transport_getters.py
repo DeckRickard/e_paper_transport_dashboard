@@ -120,5 +120,5 @@ def get_train_departure_board(station_id):
 
 if __name__ == "__main__":
     # These functions used for testing.
-    print(get_tube_station_information("940GZZLUOVL"))
+    print(get_bus_stop_information("490000247A"))
     print(get_bus_tube_arrival_predictions("940GZZLUOVL"))
