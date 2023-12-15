@@ -190,7 +190,19 @@ def main():
             
     except IOError as e:
         logging.info(e)
-        
+        # Error message will be drawn to screen.
+        epd = epd5in83_V2.EPD()
+                
+        epd.Clear()
+        epd.init()
+        # Drawing on the Horizontal image
+        logging.info("1.Drawing on the image...") 
+        HBlackimage = Image.new('1', (epd.width, epd.height), 255)  # 648*480 
+        drawblack = ImageDraw.Draw(HBlackimage)
+
+        drawblack.text((0,0), text=e, font=font18)
+        epd.sleep()                
+
     except KeyboardInterrupt:    
         logging.info("ctrl + c:")
         epd5in83_V2.epdconfig.module_exit()
