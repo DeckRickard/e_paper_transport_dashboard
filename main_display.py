@@ -128,18 +128,12 @@ def draw_stop_information(stop):
 
 def main():
     try:
-        logging.info("Display refreshing")
-        
         # Load settings
         with open("./settings.json") as file:
             settings = json.load(file)["transport"]
 
-        # Display clearing and initialisation done here.
         epd = epd5in83_V2.EPD()
-        logging.info("init")
-        epd.init()
-        time.sleep(1)
-        
+                
         # Drawing on the Horizontal image
         logging.info("1.Drawing on the image...") 
         HBlackimage = Image.new('1', (epd.width, epd.height), 255)  # 648*480 
@@ -177,6 +171,14 @@ def main():
         HBlackimage.paste(draw_stop_information(settings["stop_id_2"]), (info_2_x, info_2_y))       
         HBlackimage.paste(draw_stop_information(settings["stop_id_3"]), (info_3_x, info_3_y))       
         HBlackimage.paste(draw_stop_information(settings["stop_id_4"]), (info_4_x, info_4_y))       
+
+        logging.info("Display refreshing")
+        # Display clearing and initialisation done here.
+        logging.info("init")
+        epd.init()
+        epd.Clear()
+        time.sleep(1)
+        epd.init()
 
         # Drawn image is saved to a buffer.
         epd.display(epd.getbuffer(HBlackimage))
