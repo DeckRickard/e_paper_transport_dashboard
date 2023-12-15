@@ -28,8 +28,8 @@ def draw_weather():
     image = Image.new('1', (98, 96), 255)
     draw = ImageDraw.Draw(image)
     draw.text((49, 0), text=formatted_weather.weather_icon, font=weather_font, anchor="ma")
-    draw.text((49, 30), text=formatted_weather.weather_description, font=font14, anchor="ma")
-    draw.text((49, 65), text=formatted_weather.temperature, font = font18, anchor="ma")
+    draw.text((49, 40), text=formatted_weather.weather_description, font=font14, anchor="ma")
+    draw.text((49, 70), text=formatted_weather.temperature, font = font18, anchor="ma")
 
     return image
 
